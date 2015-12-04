@@ -21,6 +21,8 @@ This program implents the following C code into a tempalte that is executable at
         }
 
 The above code finds all the primes except 2. Translating this into an unstructed assembaly like code 
+
+
         void print_primes_5(){
                 std::array<int,4> reg;
 
