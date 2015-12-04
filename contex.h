@@ -26,23 +26,27 @@ struct is_running :
 template<typename Ctx>
 std::string ctx_to_string(){
         using reg = typename mpl::at_c<Ctx,0>::type;
-        using reg0 = typename mpl::at_c<reg,0>::type;
-        using reg1 = typename mpl::at_c<reg,1>::type;
-        using reg2 = typename mpl::at_c<reg,2>::type;
         using stack = typename mpl::at_c<Ctx,1>::type;
         using offset = typename mpl::at_c<Ctx,2>::type;
         using running = typename mpl::at_c<Ctx,3>::type;
 
-        std::stringstream sstr;
 
-        sstr << boost::format("[%3s,%3s,%3s], %3s, %3s")
-                        % reg0() % reg1() % reg2()
+        std::stringstream sstr;
+        
+        sstr << "[";
+        mpl::for_each<reg>([&sstr,first=true](auto&& value)mutable{
+                if( ! first )
+                        sstr << ",";
+                sstr << boost::format("%3s") % value;
+                first = false;
+        });
+        sstr << "]";
+
+        sstr << boost::format(", %3s, %3s")
                         % offset()
                         % running();
         sstr << "  {";
-        bool first=true;
-        mpl::for_each<stack>([&sstr,&first](auto&& value)mutable{
-                //std::cout << boost::typeindex::type_id<decltype(value)>().pretty_name() << "\n";
+        mpl::for_each<stack>([&sstr,first=true](auto&& value)mutable{
                 if( ! first )
                         sstr << ",";
                 sstr << value;
