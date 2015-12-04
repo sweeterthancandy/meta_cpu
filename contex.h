@@ -2,11 +2,12 @@
 
 #include <sstream>
 #include <boost/mpl/for_each.hpp>
+#include <boost/preprocessor.hpp>
+#include "register.h"
 
 using default_contex = mpl::vector< 
         // registers memory
         mpl::vector<
-                int_<0>,
                 int_<0>,
                 int_<0>,
                 int_<0>
@@ -28,15 +29,14 @@ std::string ctx_to_string(){
         using reg0 = typename mpl::at_c<reg,0>::type;
         using reg1 = typename mpl::at_c<reg,1>::type;
         using reg2 = typename mpl::at_c<reg,2>::type;
-        using reg3 = typename mpl::at_c<reg,3>::type;
         using stack = typename mpl::at_c<Ctx,1>::type;
         using offset = typename mpl::at_c<Ctx,2>::type;
         using running = typename mpl::at_c<Ctx,3>::type;
 
         std::stringstream sstr;
 
-        sstr << boost::format("[%3s,%3s,%3s,%3s], %3s, %3s")
-                        % reg0() % reg1() % reg2() % reg3()
+        sstr << boost::format("[%3s,%3s,%3s], %3s, %3s")
+                        % reg0() % reg1() % reg2()
                         % offset()
                         % running();
         sstr << "  {";
