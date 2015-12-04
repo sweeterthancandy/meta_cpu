@@ -1,4 +1,5 @@
 # meta_cpu
+C++ meta-programming exercise implementing 3 address code at compile time
 
 This program implents the following C code into a tempalte that is executable at compile time. Starting with 
 
@@ -78,7 +79,6 @@ This can then be expressed at the folloing template
 
         ./mcpu
 
-        C++ meta-programming exercise implementing 3 address code at compile time
         ------- asm code
         0   mov 3, %0
         1   start_outer_:
