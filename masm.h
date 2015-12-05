@@ -43,15 +43,6 @@ namespace mpl = boost::mpl;
 #include "ops.h"
 
 
-
-
-
-
-
-
-
-
-
 /*
  * this translate all jump instructions
  * to numeric offsets
@@ -190,23 +181,24 @@ struct execution_contex
         >::type;
         using type = typename meta::type;
         
-        static void debug(int n=0){
-                //to_execute::template apply<Ctx>::debug();
+        template<typename C=next_ctx>
+        static typename boost::enable_if< is_running<C> >::type debug(int n=0){
                 std::cout << boost::format("%-3i %-15s %s\n")
                         % n
                         % to_execute::to_string()
                         % ctx_to_string<next_ctx>()
                         ;
+               execution_contex<Asm,next_ctx>::debug(n+1); 
 
-                debug_next_(n);
         }
-
+        
         template<typename C=next_ctx>
-        static typename boost::enable_if< is_running<C> >::type debug_next_(int n){
-               execution_contex<Asm,C>::debug(n+1); 
-        }
-        template<typename C=next_ctx>
-        static typename boost::disable_if< is_running<C> >::type debug_next_(int n){
+        static typename boost::disable_if< is_running<C> >::type debug(int n=0){
+                std::cout << boost::format("%-3i %-15s %s\n")
+                        % n
+                        % to_execute::to_string()
+                        % ctx_to_string<next_ctx>()
+                        ;
         }
 };
 

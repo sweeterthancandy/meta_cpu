@@ -99,6 +99,23 @@ struct push{
         }
 };
 
+struct nop{
+        template<typename Ctx>
+        struct apply{
+                using type = mpl::vector<
+                        typename mpl::at_c<Ctx,0>::type, 
+                        typename mpl::at_c<Ctx,1>::type, 
+                        typename mpl::at_c<Ctx,2>::type, 
+                        typename mpl::at_c<Ctx,3>::type
+                >;
+        };
+        static std::string to_string(){
+                return "nop";
+        }
+        static void print(){
+                std::cout << to_string() << "\n";
+        }
+};
 
 struct end{
         template<typename Ctx>
