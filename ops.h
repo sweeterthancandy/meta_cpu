@@ -1,19 +1,6 @@
 #pragma once
 
-template<class L_Param, class R_Param, class Result>
-struct tribinaryop{
-        template<typename Ctx>
-        struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::at_c<Ctx,2>::type, 
-                        mpl::false_
-                >;
-        };
-        static std::string to_string(){}
-};
-
+#include "contex.h"
 
 
 template<class L_Param, class R_Param>
@@ -27,25 +14,13 @@ struct mov{
                 // index of register
                 using index = typename R_Param::index;
                         
-                using old_reg = typename mpl::at_c<Ctx,0>::type;
+                using old_reg = typename ctx_util::get_registers<Ctx>::type;
                         
                 using reg = typename assign_reg< old_reg,value,index>::type;
 
-                static void debug(){
-                        PRINT(value());
-                        PRINT(index());
-
-                }
-
-                // make new contex
-                using type = mpl::vector<
-                        reg,
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::next<
-                                typename mpl::at_c<Ctx,2>::type
-                        >::type,
-                        typename mpl::at_c<Ctx,3>::type
-                >;
+                using type = typename ctx_util::increment_counter<
+                        typename ctx_util::set_registers< Ctx,reg>::type 
+                >::type;
         };
         static std::string to_string(){
                 std::stringstream sstr;
@@ -59,33 +34,22 @@ struct mov{
                 std::cout << to_string() << "\n";
         }
 };
-template<class L_Param, class R_Param>
-struct binop{
-        template<typename Ctx>
-        struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::at_c<Ctx,2>::type, 
-                        mpl::false_
-                >;
-        };
-        static std::string to_string(){}
-};
 template<class Param>
 struct push{
         template<typename Ctx>
         struct apply{
                 using value = typename Param::template eval<Ctx>::type;
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::push_front<
-                                typename mpl::at_c<Ctx,1>::type, 
-                                value
-                        >::type,
-                        typename mpl::next<typename mpl::at_c<Ctx,2>::type>::type,
-                        mpl::true_
-                >;
+
+                using type = typename ctx_util::increment_counter<
+                        typename ctx_util::set_stack<
+                                Ctx,
+                                typename mpl::push_front<
+                                        typename ctx_util::get_stack<Ctx>::type,
+                                        value
+                                >::type
+                        >::type
+                >::type;
+
         };
         static std::string to_string(){
                 std::stringstream sstr;
@@ -102,12 +66,7 @@ struct push{
 struct nop{
         template<typename Ctx>
         struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::at_c<Ctx,2>::type, 
-                        typename mpl::at_c<Ctx,3>::type
-                >;
+                using type = Ctx;
         };
         static std::string to_string(){
                 return "nop";
@@ -120,12 +79,7 @@ struct nop{
 struct end{
         template<typename Ctx>
         struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::at_c<Ctx,2>::type, 
-                        mpl::false_
-                >;
+                using type = typename ctx_util::set_running<Ctx,mpl::false_>::type;
         };
         static std::string to_string(){
                 return "end";
@@ -133,17 +87,4 @@ struct end{
         static void print(){
                 std::cout << to_string() << "\n";
         }
-};
-template<class Param>
-struct unaryop{
-        template<typename Ctx>
-        struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::at_c<Ctx,2>::type, 
-                        mpl::false_
-                >;
-        };
-        static std::string to_string(){}
 };

@@ -2,6 +2,8 @@
 
 #define CONFIG_MAX_REG 3
 
+#include "ctx_util.h"
+
 namespace mpl = boost::mpl;
 
 template<int Index>
@@ -15,7 +17,7 @@ struct reg{
         template<typename Ctx>
         struct eval{
                 using type = typename mpl::at<
-                        typename mpl::at_c<Ctx,0>::type,
+                        typename ctx_util::get_registers<Ctx>::type,
                         index
                 >::type;
         };

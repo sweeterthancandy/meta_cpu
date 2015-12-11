@@ -21,7 +21,7 @@ struct basic_binary_op{
                 using lp = typename L_Param::template eval<Ctx>::type;
                 using rp = typename R_Param::template eval<Ctx>::type;
 
-                using result = typename mpl::apply< operator_t,lp,rp>::type;
+                using result = typename mpl::apply<operator_t,lp,rp>::type;
 
                 using reg = typename assign_reg<
                         typename mpl::at_c<Ctx,0>::type, 

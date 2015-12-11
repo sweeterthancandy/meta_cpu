@@ -5,6 +5,7 @@
 #include <boost/preprocessor.hpp>
 
 #include "op_traits.h"
+#include "contex.h"
 
 template<class L_Param, class R_Param, class Operator, class Name>
 struct basic_cond_jump{
@@ -17,16 +18,17 @@ struct basic_cond_jump{
         struct apply{
                 using lp = typename L_Param::template eval<Ctx>::type;
                 using offset = R_Param;
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
+
+                using type = typename ctx_util::set_counter<
+                        Ctx,
                         typename mpl::if_<
                                 typename mpl::apply<operator_t, lp>::type,
                                 offset,
-                                typename mpl::next< typename mpl::at_c<Ctx,2>::type >::type
-                        >::type,
-                        mpl::true_
-                >;
+                                typename mpl::next< 
+                                        typename ctx_util::get_counter<Ctx>::type
+                                >::type
+                        >::type
+                >::type;
         };
         template<typename Label = R_Param>
         static typename boost::enable_if< is_label<Label>,std::string >::type to_string(){

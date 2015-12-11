@@ -5,10 +5,12 @@ struct label_string;
 
 template<int Index>
 struct label{
-        template<typename Context>
-        struct apply{
-                using ctx = Context;
-        };
+        // Don't think I want this
+        //
+        //template<typename Context>
+        //struct apply{
+                //using ctx = Context;
+        //};
         static std::string to_string(){
                 std::stringstream sstr;
                 sstr << label_string<label<Index> >::get() << ":";

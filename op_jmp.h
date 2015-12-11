@@ -1,17 +1,13 @@
 #pragma once
 
 #include "op_traits.h"
+#include "contex.h"
 
 template<class Param>
 struct jmp{
         template<typename Ctx>
         struct apply{
-                using type = mpl::vector<
-                        typename mpl::at_c<Ctx,0>::type, 
-                        typename mpl::at_c<Ctx,1>::type, 
-                        Param,
-                        mpl::true_
-                >;
+                using type = typename ctx_util::set_counter<Ctx,Param>::type;
         };
         template<typename Label = Param>
         static typename boost::enable_if< is_label<Label>,std::string >::type to_string(){
