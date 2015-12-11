@@ -3,6 +3,7 @@
 #include <sstream>
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/range_c.hpp>
 #include <boost/preprocessor.hpp>
 #include <boost/type_index.hpp>
 
@@ -10,13 +11,24 @@
 #include "int.h"
 
 
-using default_contex = mpl::vector< 
+template<size_t Num_Registers>
+using make_default_contex = mpl::vector< 
         // 0: registers memory
-        mpl::vector<
-                int_<0>,
-                int_<0>,
-                int_<0>
-        >,
+        //mpl::vector<
+                //int_<0>,
+                //int_<0>,
+                //int_<0>
+        //>,
+
+        typename mpl::fold<
+                mpl::range_c<size_t,0,Num_Registers>,
+                mpl::vector<>,
+                mpl::push_back<
+                        mpl::_1,
+                        int_<0>
+                >
+        >::type,
+                
         // 1: the stack
         mpl::list<>,
         // 2: program counter
@@ -28,7 +40,6 @@ using default_contex = mpl::vector<
 >;
 
 
-static_assert( mpl::size<default_contex>::value == 5 ,"");
 
 
 template<typename Ctx>

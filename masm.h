@@ -203,14 +203,17 @@ struct execution_contex
 };
 
 
-template<typename Asm>
+template<size_t Num_Registers, typename Asm>
 struct program{
 
         using assember_type = aux::assembler<Asm>;
         using assembed = typename assember_type::type;
         using without_labels = typename assember_type::without_labels;
 
-        using exe = execution_contex<assembed, default_contex>;
+        using exe = execution_contex<
+                assembed, 
+                typename make_default_contex<Num_Registers>::type
+        >;
 
         using contex = typename exe::type;
         using stack = typename ctx_util::get_stack<contex>::type;

@@ -62,6 +62,36 @@ struct push{
                 std::cout << to_string() << "\n";
         }
 };
+#if 1
+template<class Reg>
+struct pop{
+        BOOST_MPL_ASSERT(( is_reg<Reg> ));
+        template<typename Ctx>
+        struct apply{
+                using value = typename Reg::template eval<Ctx>::type;
+
+                using type = typename ctx_util::increment_counter<
+                        typename ctx_util::set_stack<
+                                Ctx,
+                                typename mpl::pop_front<
+                                        typename ctx_util::get_stack<Ctx>::type
+                                >::type
+                        >::type
+                >::type;
+
+        };
+        static std::string to_string(){
+                std::stringstream sstr;
+                sstr << boost::format("pop %s")
+                        % Reg::to_string()
+                        ;
+                return sstr.str();
+        }
+        static void print(){
+                std::cout << to_string() << "\n";
+        }
+};
+#endif
 template<class Param>
 struct opush{
         template<typename Ctx>
