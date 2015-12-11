@@ -27,6 +27,7 @@ DEF_LABEL_STRING(not_prime_ )
 #undef DEF_LABEL_STRING
 
 using prog_ = mpl::vector<
+        nop,
         mov< int_<3>, reg<0> >, 
         start_outer_,
         sub< reg<0>, int_<CONFIG_MAX_PRIME>, reg<2> >,
@@ -41,7 +42,7 @@ using prog_ = mpl::vector<
         add< reg<1>, int_<2>, reg<1> >,
         jmp<start_inner_>,
         end_inner_,
-        push< reg<0> >,
+        opush< reg<0> >,
         not_prime_,
         add< reg<0>, int_<2>, reg<0> >,
         jmp<start_outer_>,
@@ -60,7 +61,7 @@ int main(int argc, char** argv){
                 prog::debugger();
                 
                 // stack is in reverse
-                using rev_result = prog::stack;
+                using rev_result = prog::output_stack;
                 using result = mpl::reverse<rev_result>::type;
                 
                 std::cout << "------- output stack\n";

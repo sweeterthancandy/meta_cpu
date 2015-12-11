@@ -1,4 +1,4 @@
 #pragma once
 
 template<typename T>
-struct is_jump_op : public mpl::false_{};
+struct have_labels_to_resolve : public mpl::false_{};

@@ -62,11 +62,39 @@ struct push{
                 std::cout << to_string() << "\n";
         }
 };
+template<class Param>
+struct opush{
+        template<typename Ctx>
+        struct apply{
+                using value = typename Param::template eval<Ctx>::type;
+
+                using type = typename ctx_util::increment_counter<
+                        typename ctx_util::set_output_stack<
+                                Ctx,
+                                typename mpl::push_front<
+                                        typename ctx_util::get_output_stack<Ctx>::type,
+                                        value
+                                >::type
+                        >::type
+                >::type;
+
+        };
+        static std::string to_string(){
+                std::stringstream sstr;
+                sstr << boost::format("push %s")
+                        % Param::to_string()
+                        ;
+                return sstr.str();
+        }
+        static void print(){
+                std::cout << to_string() << "\n";
+        }
+};
 
 struct nop{
         template<typename Ctx>
         struct apply{
-                using type = Ctx;
+                using type = typename ctx_util::increment_counter<Ctx>::type;
         };
         static std::string to_string(){
                 return "nop";
@@ -88,3 +116,4 @@ struct end{
                 std::cout << to_string() << "\n";
         }
 };
+

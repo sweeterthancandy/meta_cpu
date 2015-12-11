@@ -38,4 +38,8 @@ struct jmp{
         };
 };
 template<class Param>
-struct is_jump_op< jmp<Param> > : mpl::true_{};
+struct have_labels_to_resolve< jmp<Param> > : mpl::true_{};
+
+//template<class Label>
+//struct call{
+//};

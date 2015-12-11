@@ -24,19 +24,14 @@ struct basic_binary_op{
                 using result = typename mpl::apply<operator_t,lp,rp>::type;
 
                 using reg = typename assign_reg<
-                        typename mpl::at_c<Ctx,0>::type, 
+                        typename ctx_util::get_registers<Ctx>::type,
                         result,
                         typename Result::index
                 >::type;
 
-                using type = mpl::vector<
-                        reg,
-                        typename mpl::at_c<Ctx,1>::type, 
-                        typename mpl::next<
-                                typename mpl::at_c<Ctx,2>::type
-                        >::type,
-                        typename mpl::at_c<Ctx,3>::type
-                >;
+                using type = typename ctx_util::increment_counter<
+                        typename ctx_util::set_registers<Ctx,reg>::type
+                >::type;
         };
         static std::string to_string(){
                 std::stringstream sstr;

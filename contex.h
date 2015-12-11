@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <boost/mpl/for_each.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/preprocessor.hpp>
 #include <boost/type_index.hpp>
 
@@ -22,9 +23,12 @@ using default_contex = mpl::vector<
         mpl::int_<0>,
         // 3: is running
         mpl::true_
-        // output stack
+        // 4: output stack
         ,mpl::list<>
 >;
+
+
+static_assert( mpl::size<default_contex>::value == 5 ,"");
 
 
 template<typename Ctx>

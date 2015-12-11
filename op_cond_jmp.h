@@ -78,7 +78,7 @@ struct basic_cond_jump{
                          mpl::string<BOOST_PP_SEQ_ENUM(BOOST_PP_SEQ_ELEM(2,elem))>\
         >{};\
         template<class L_Param, class R_Param>\
-        struct is_jump_op< BOOST_PP_SEQ_ELEM(0,elem)< L_Param,  R_Param> > : mpl::true_{};\
+        struct have_labels_to_resolve< BOOST_PP_SEQ_ELEM(0,elem)< L_Param,  R_Param> > : mpl::true_{};\
 
 BOOST_PP_SEQ_FOR_EACH(OP_COND_JMP_aux,~, OP_COND_JMP_seq)
 

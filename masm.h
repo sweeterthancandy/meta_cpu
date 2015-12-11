@@ -131,7 +131,7 @@ namespace aux{
                                 mpl::push_back<
                                         _1,
                                         mpl::if_<
-                                                is_jump_op<_2>,
+                                                have_labels_to_resolve<_2>,
                                                 resolve_label<_2,label_index>,
                                                 _2
                                         >
@@ -213,7 +213,8 @@ struct program{
         using exe = execution_contex<assembed, default_contex>;
 
         using contex = typename exe::type;
-        using stack = typename mpl::at_c<contex,1>::type;
+        using stack = typename ctx_util::get_stack<contex>::type;
+        using output_stack = typename ctx_util::get_output_stack<contex>::type;
 
 
         static void print_asm(){
