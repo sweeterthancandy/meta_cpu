@@ -16,7 +16,7 @@ struct jmp{
         static typename boost::enable_if< is_label<Label>,std::string >::type to_string(){
                 std::stringstream sstr;
                 sstr << boost::format("jmp %s")
-                        % label_string<Param>::get()
+                        % Label::to_string();
                         ;
                 return sstr.str();
         }
@@ -66,7 +66,7 @@ struct call{
         static typename boost::enable_if< is_label<Label>,std::string >::type to_string(){
                 std::stringstream sstr;
                 sstr << boost::format("call %s")
-                        % label_string<Param>::get()
+                        % Label::to_string()
                         ;
                 return sstr.str();
         }

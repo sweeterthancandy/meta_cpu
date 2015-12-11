@@ -36,7 +36,7 @@ struct basic_cond_jump{
                 sstr << boost::format("%s %s, %s")
                         % mpl::c_str<name_t>::value
                         % L_Param::to_string()
-                        % label_string<R_Param>::get()
+                        % Label::to_string()
                         ;
                 return sstr.str();
         }

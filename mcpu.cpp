@@ -3,36 +3,16 @@
 #include <boost/mpl/reverse.hpp>
 #include "test_rt_prime.h"
 
-using start_outer_ = label<0>;
-using start_inner_ = label<1>;
-using end_inner_  = label<2>;
-using end_outer_  = label<3>;
-using not_prime_  = label<4>;
-using fun_  = label<5>;
-using fun2_  = label<7>;
-using start_  = label<6>;
+DEF_LABEL(start_outer_)
+DEF_LABEL(start_inner_)
+DEF_LABEL(end_inner_ )
+DEF_LABEL(end_outer_ )
+DEF_LABEL(not_prime_ )
+DEF_LABEL(fun_ )
+DEF_LABEL(fun2_ )
+DEF_LABEL(start_ )
 
-#define DEF_LABEL_STRING(LABEL)\
-        template<>\
-        struct label_string<LABEL>\
-        {\
-                static std::string get(){\
-                        return BOOST_PP_STRINGIZE(LABEL);\
-                }\
-        };
 
-DEF_LABEL_STRING(start_outer_)
-DEF_LABEL_STRING(start_inner_)
-DEF_LABEL_STRING(end_inner_ )
-DEF_LABEL_STRING(end_outer_ )
-DEF_LABEL_STRING(not_prime_ )
-DEF_LABEL_STRING(fun_ )
-DEF_LABEL_STRING(fun2_ )
-DEF_LABEL_STRING(start_ )
-
-#undef DEF_LABEL_STRING
-
-#if 0
 using prog_ = mpl::vector<
         nop,
         mov< int_<3>, reg<0> >, 
@@ -55,23 +35,7 @@ using prog_ = mpl::vector<
         jmp<start_outer_>,
         end_outer_
 >;
-#else
-using prog_ = mpl::vector<
-        jmp<start_>,
-        fun_,
-        opush< int_<23> >,
-        opush< int_<23> >,
-        ret,
-        start_,
-        opush< int_<1111> >,
-        call<fun_>,
-        call<fun2_>,
-        end,
-        fun2_,
-        opush< int_<333> >,
-        ret
->;
-#endif
+
 using prog  = program<prog_>;
 
 int main(int argc, char** argv){
